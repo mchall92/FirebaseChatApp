@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (username_str.length() == 0 || email_str.length() == 0 || password_str.length() == 0) {
                     Toast.makeText(RegisterActivity.this,
-                            "Please fill your information", Toast.LENGTH_LONG);
+                            "Please fill your information", Toast.LENGTH_LONG).show();
                 } else {
                     RegisterNow(username_str, email_str, password_str);
                 }
