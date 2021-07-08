@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "719167952616",
+    "project_id": "fir-chatapp-54bd0",
+    "storage_bucket": "fir-chatapp-54bd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719167952616:android:98bb8d3a1cab61d0b71b5d",
+        "android_client_info": {
+          "package_name": "neu.edu.madcourse.firebasechatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719167952616-2mlgocejd42l3l8k8647ikud23bgnajl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVIIN_33Ty5P70l-WMVxGkhANkq60Zkk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719167952616-2mlgocejd42l3l8k8647ikud23bgnajl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
