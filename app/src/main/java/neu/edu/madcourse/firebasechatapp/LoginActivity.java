@@ -40,14 +40,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // firebase user
         auth = FirebaseAuth.getInstance();
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        // check user existence by using current saved user
-        if (firebaseUser != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         // login button
         loginButton = findViewById(R.id.login_button);
@@ -89,5 +81,18 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(toRegisterIntent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // check user existence by using current saved user
+        if (firebaseUser != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

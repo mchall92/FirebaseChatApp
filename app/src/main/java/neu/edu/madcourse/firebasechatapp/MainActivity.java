@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 Users users = snapshot.getValue(Users.class);
-                Toast.makeText(MainActivity.this, "User LoginL "
-                + users.getUsername(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -49,5 +49,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // Add Logout
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+                return true;
+        }
+        return false;
     }
 }
