@@ -2,12 +2,31 @@ package neu.edu.madcourse.firebasechatapp.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import neu.edu.madcourse.firebasechatapp.Adapters.UserAdapter;
+import neu.edu.madcourse.firebasechatapp.Model.ChatList;
+import neu.edu.madcourse.firebasechatapp.Model.Users;
 import neu.edu.madcourse.firebasechatapp.R;
 
 /**
@@ -16,6 +35,16 @@ import neu.edu.madcourse.firebasechatapp.R;
  * create an instance of this fragment.
  */
 public class ChatsFragment extends Fragment {
+
+    private UserAdapter userAdapter;
+    private List<Users> mUserList;
+
+    private FirebaseUser firebaseUser;
+    private DatabaseReference ref;
+
+    private List<ChatList> mUserChatList;
+
+    private RecyclerView chatFragmentRecyclerview;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,7 +89,70 @@ public class ChatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chats, container, false);
+        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+
+        chatFragmentRecyclerview = view.findViewById(R.id.chat_fragment_recyclerview);
+        chatFragmentRecyclerview.setHasFixedSize(true);
+        chatFragmentRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        mUserChatList = new ArrayList<>();
+
+        ref = FirebaseDatabase.getInstance()
+                .getReference("ChatList")
+                .child(firebaseUser.getUid());
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                mUserChatList.clear();
+
+                // find all users
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    ChatList chatList = sn.getValue(ChatList.class);
+                    mUserChatList.add(chatList);
+                }
+                buildChatList();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            }
+        });
+
+        return view;
+    }
+
+    private void buildChatList() {
+
+        // Get all the most recent chats
+        mUserList = new ArrayList<>();
+
+        ref = FirebaseDatabase.getInstance().getReference("MyUsers");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                mUserList.clear();
+
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    Users users = sn.getValue(Users.class);
+
+                    for (ChatList chatList : mUserChatList) {
+                        if (users.getId().equals(chatList.getId())) {
+                            mUserList.add(users);
+                        }
+                    }
+                }
+
+                userAdapter = new UserAdapter(getContext(), mUserList);
+                chatFragmentRecyclerview.setAdapter(userAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 }

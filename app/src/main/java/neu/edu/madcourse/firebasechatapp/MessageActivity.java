@@ -45,6 +45,7 @@ public class MessageActivity extends AppCompatActivity {
     DatabaseReference ref;
 
     Intent intent;
+    String userId;
 
     RecyclerView messageRecyclerview;
     LinearLayoutManager linearLayoutManager;
@@ -65,7 +66,7 @@ public class MessageActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.message_activity_toolbar);
 
         intent = getIntent();
-        String userId = intent.getStringExtra("userId");
+        userId = intent.getStringExtra("userId");
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference("MyUsers").child(userId);
@@ -139,6 +140,26 @@ public class MessageActivity extends AppCompatActivity {
         map.put("message", message);
 
         ref.child("Chats").push().setValue(map);
+
+        // add user to chat fragment
+        final DatabaseReference chatRef = FirebaseDatabase
+                .getInstance()
+                .getReference("ChatList")
+                .child(firebaseUser.getUid())
+                .child(userId);
+
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    chatRef.child("id").setValue(userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            }
+        });
     }
 
     private void readMessage(String myId, String userId) {
@@ -158,6 +179,7 @@ public class MessageActivity extends AppCompatActivity {
                     }
                 }
                 messageAdapter = new MessageAdapter(MessageActivity.this, mChatList);
+                messageRecyclerview.setAdapter(messageAdapter);
             }
 
             @Override
