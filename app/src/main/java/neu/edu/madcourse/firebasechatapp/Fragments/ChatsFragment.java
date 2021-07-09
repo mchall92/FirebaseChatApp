@@ -144,14 +144,12 @@ public class ChatsFragment extends Fragment {
                         }
                     }
                 }
-
                 userAdapter = new UserAdapter(getContext(), mUserList);
                 chatFragmentRecyclerview.setAdapter(userAdapter);
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
             }
         });
     }
