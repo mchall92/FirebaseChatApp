@@ -3,6 +3,7 @@ package neu.edu.madcourse.firebasechatapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -26,8 +27,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import neu.edu.madcourse.firebasechatapp.Adapters.MessageAdapter;
+import neu.edu.madcourse.firebasechatapp.Model.Chat;
 import neu.edu.madcourse.firebasechatapp.Model.Users;
 
 public class MessageActivity extends AppCompatActivity {
@@ -42,6 +47,10 @@ public class MessageActivity extends AppCompatActivity {
     Intent intent;
 
     RecyclerView messageRecyclerview;
+    LinearLayoutManager linearLayoutManager;
+    MessageAdapter messageAdapter;
+    List<Chat> mChatList;
+
     EditText messageEditText;
     ImageButton messageSendButton;
 
@@ -50,6 +59,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        //widgets
         username = findViewById(R.id.message_activity_username);
         imageView = findViewById(R.id.message_activity_profile_img);
         toolbar = findViewById(R.id.message_activity_toolbar);
@@ -67,6 +77,8 @@ public class MessageActivity extends AppCompatActivity {
                 assert user != null;
                 username.setText(user.getUsername());
                 imageView.setImageResource(R.mipmap.ic_launcher);
+
+                readMessage(firebaseUser.getUid(), userId);
             }
 
             @Override
@@ -90,17 +102,14 @@ public class MessageActivity extends AppCompatActivity {
                 messageEditText.setText("");
             }
         });
-    }
 
-    private void sendMessage(String sender, String receiver, String message) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        // Recyclerview
+        messageRecyclerview = findViewById(R.id.message_activity_recyclerview);
+        messageRecyclerview.setHasFixedSize(true);
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("sender", sender);
-        map.put("receiver", receiver);
-        map.put("message", message);
-
-        ref.child("Chats").push().setValue(map);
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        messageRecyclerview.setLayoutManager(linearLayoutManager);
     }
 
     @Override
@@ -119,5 +128,41 @@ public class MessageActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    private void sendMessage(String sender, String receiver, String message) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("sender", sender);
+        map.put("receiver", receiver);
+        map.put("message", message);
+
+        ref.child("Chats").push().setValue(map);
+    }
+
+    private void readMessage(String myId, String userId) {
+        mChatList = new ArrayList<>();
+
+        ref = FirebaseDatabase.getInstance().getReference("Chats");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                mChatList.clear();
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    Chat chat = sn.getValue(Chat.class);
+
+                    if ((chat.getReceiver().equals(myId) && chat.getSender().equals(userId))
+                    || (chat.getReceiver().equals(userId) && chat.getSender().equals(myId))) {
+                        mChatList.add(chat);
+                    }
+                }
+                messageAdapter = new MessageAdapter(MessageActivity.this, mChatList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            }
+        });
     }
 }
