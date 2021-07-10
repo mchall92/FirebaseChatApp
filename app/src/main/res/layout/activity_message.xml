@@ -40,27 +40,93 @@
         android:id="@+id/message_activity_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="#F1EBEB"
         android:padding="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/message_activity_message_edit_text"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="354dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/message_activity_send_button"
-            android:autofillHints="Send A Message"
-            android:background="@android:color/transparent" />
+            android:padding="5dp">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/message_activity_telescope"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/telescope"
+                app:layout_constraintBottom_toTopOf="@+id/message_activity_kayak"
+                app:layout_constraintEnd_toStartOf="@+id/message_activity_kite"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/message_activity_kite"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/kite"
+                app:layout_constraintBottom_toTopOf="@+id/message_activity_hot_air"
+                app:layout_constraintEnd_toStartOf="@+id/message_activity_soccer"
+                app:layout_constraintStart_toEndOf="@id/message_activity_telescope"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/message_activity_soccer"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/soccer"
+                app:layout_constraintBottom_toTopOf="@+id/message_activity_bike"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/message_activity_kite"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/message_activity_kayak"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/kayak"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/message_activity_hot_air"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/message_activity_telescope" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/message_activity_hot_air"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/hot_air_balloon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/message_activity_bike"
+                app:layout_constraintStart_toEndOf="@id/message_activity_kayak"
+                app:layout_constraintTop_toBottomOf="@+id/message_activity_kite"
+                app:layout_constraintVertical_bias="0.64" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/message_activity_bike"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/bicycle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/message_activity_hot_air"
+                app:layout_constraintTop_toBottomOf="@+id/message_activity_soccer" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <ImageButton
             android:id="@+id/message_activity_send_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:background="@drawable/ic_send" />
     </RelativeLayout>
 

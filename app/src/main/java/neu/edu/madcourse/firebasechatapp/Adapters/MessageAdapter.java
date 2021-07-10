@@ -24,10 +24,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
+    private static final int NUM_STICKERS = 6;
 
     private Context chatContext;
     private List<Chat> mChatList;
-
 
     private FirebaseUser firebaseUser;
 
@@ -55,7 +55,27 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(@NonNull @NotNull MessageAdapter.MessageViewHolder holder, int position) {
         Chat chat = mChatList.get(position);
 
-        holder.message.setText(chat.getMessage());
+        int num = (chat.getMessage().charAt(0) - '0') % NUM_STICKERS;
+        switch (num) {
+            case (1):
+                holder.message.setImageResource(R.drawable.bicycle);
+                break;
+            case (2):
+                holder.message.setImageResource(R.drawable.kayak);
+                break;
+            case (3):
+                holder.message.setImageResource(R.drawable.soccer);
+                break;
+            case (4):
+                holder.message.setImageResource(R.drawable.telescope);
+                break;
+            case (5):
+                holder.message.setImageResource(R.drawable.kite);
+                break;
+            case (0):
+                holder.message.setImageResource(R.drawable.hot_air_balloon);
+                break;
+        }
     }
 
     @Override
@@ -65,7 +85,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private TextView message;
+        private ImageView message;
 
         public MessageViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);

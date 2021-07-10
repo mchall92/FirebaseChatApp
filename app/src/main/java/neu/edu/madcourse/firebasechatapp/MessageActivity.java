@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,25 +38,35 @@ import neu.edu.madcourse.firebasechatapp.Model.Chat;
 import neu.edu.madcourse.firebasechatapp.Model.Users;
 import neu.edu.madcourse.firebasechatapp.Utils.ImageSelector;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Toolbar toolbar;
-    TextView username;
-    ImageView imageView;
+    private Toolbar toolbar;
+    private TextView username;
+    private ImageView imageView;
 
-    FirebaseUser firebaseUser;
-    DatabaseReference ref;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference ref;
 
-    Intent intent;
-    String userId;
+    private Intent intent;
+    private String userId;
 
-    RecyclerView messageRecyclerview;
-    LinearLayoutManager linearLayoutManager;
-    MessageAdapter messageAdapter;
-    List<Chat> mChatList;
+    private RecyclerView messageRecyclerview;
+    private LinearLayoutManager linearLayoutManager;
+    private MessageAdapter messageAdapter;
+    private List<Chat> mChatList;
 
-    EditText messageEditText;
-    ImageButton messageSendButton;
+    // sticker buttons
+    private CircularImageView soccerButton;
+    private CircularImageView kiteButton;
+    private CircularImageView telescopeButton;
+    private CircularImageView bikeButton;
+    private CircularImageView hotAirButton;
+    private CircularImageView kayakButton;
+
+    // selected sticker
+    private int selectedNum = 0;
+
+    private ImageButton messageSendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +101,32 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        messageSendButton = findViewById(R.id.message_activity_send_button);
-        messageEditText = findViewById(R.id.message_activity_message_edit_text);
+        // set up sticker buttons
+        soccerButton = findViewById(R.id.message_activity_soccer);
+        kiteButton = findViewById(R.id.message_activity_kite);
+        telescopeButton = findViewById(R.id.message_activity_telescope);
+        bikeButton = findViewById(R.id.message_activity_bike);
+        hotAirButton = findViewById(R.id.message_activity_hot_air);
+        kayakButton = findViewById(R.id.message_activity_kayak);
 
-        messageSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = messageEditText.getText().toString();
-                if (message.length() > 0) {
-                    sendMessage(firebaseUser.getUid(), userId, message);
-                } else {
-                    Toast.makeText(MessageActivity.this, "failed", Toast.LENGTH_LONG).show();
-                }
-                messageEditText.setText("");
-            }
-        });
+        soccerButton.setBorderWidth(15f);
+        kiteButton.setBorderWidth(15f);
+        telescopeButton.setBorderWidth(15f);
+        bikeButton.setBorderWidth(15f);
+        hotAirButton.setBorderWidth(15f);
+        kayakButton.setBorderWidth(15f);
+
+        soccerButton.setOnClickListener(this);
+        kiteButton.setOnClickListener(this);
+        telescopeButton.setOnClickListener(this);
+        bikeButton.setOnClickListener(this);
+        hotAirButton.setOnClickListener(this);
+        kayakButton.setOnClickListener(this);
+
+
+        // send sticker button
+        messageSendButton = findViewById(R.id.message_activity_send_button);
+        messageSendButton.setOnClickListener(this);
 
         // Recyclerview
         messageRecyclerview = findViewById(R.id.message_activity_recyclerview);
@@ -187,5 +210,53 @@ public class MessageActivity extends AppCompatActivity {
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        resetStickers();
+        switch (v.getId()) {
+            case (R.id.message_activity_send_button):
+                if (selectedNum > 0) {
+                    sendMessage(firebaseUser.getUid(), userId, String.valueOf(selectedNum));
+                } else {
+                    Toast.makeText(MessageActivity.this,
+                            "Please Select A Sticker", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case (R.id.message_activity_bike):
+                bikeButton.setBorderColor(Color.DKGRAY);
+                selectedNum = 1;
+                break;
+            case (R.id.message_activity_kayak):
+                kayakButton.setBorderColor(Color.DKGRAY);
+                selectedNum = 2;
+                break;
+            case (R.id.message_activity_soccer):
+                soccerButton.setBorderColor(Color.DKGRAY);
+                selectedNum = 3;
+                break;
+            case (R.id.message_activity_telescope):
+                telescopeButton.setBorderColor(Color.DKGRAY);
+                selectedNum = 4;
+                break;
+            case (R.id.message_activity_kite):
+                kiteButton.setBorderColor(Color.DKGRAY);
+                selectedNum = 5;
+                break;
+            case (R.id.message_activity_hot_air):
+                hotAirButton.setBorderColor(Color.DKGRAY);
+                selectedNum = 6;
+                break;
+        }
+    }
+
+    private void resetStickers() {
+        soccerButton.setBorderColor(Color.WHITE);
+        kiteButton.setBorderColor(Color.WHITE);
+        telescopeButton.setBorderColor(Color.WHITE);
+        bikeButton.setBorderColor(Color.WHITE);
+        hotAirButton.setBorderColor(Color.WHITE);
+        kayakButton.setBorderColor(Color.WHITE);
     }
 }
