@@ -34,6 +34,7 @@ import java.util.List;
 import neu.edu.madcourse.firebasechatapp.Adapters.MessageAdapter;
 import neu.edu.madcourse.firebasechatapp.Model.Chat;
 import neu.edu.madcourse.firebasechatapp.Model.Users;
+import neu.edu.madcourse.firebasechatapp.Utils.ImageSelector;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -77,7 +78,7 @@ public class MessageActivity extends AppCompatActivity {
                 Users user = snapshot.getValue(Users.class);
                 assert user != null;
                 username.setText(user.getUsername());
-                imageView.setImageResource(R.mipmap.ic_launcher);
+                ImageSelector.select(imageView, user.getUsername());
 
                 readMessage(firebaseUser.getUid(), userId);
             }

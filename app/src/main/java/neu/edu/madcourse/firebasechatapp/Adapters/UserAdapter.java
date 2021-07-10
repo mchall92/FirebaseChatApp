@@ -18,6 +18,7 @@ import java.util.List;
 import neu.edu.madcourse.firebasechatapp.MessageActivity;
 import neu.edu.madcourse.firebasechatapp.Model.Users;
 import neu.edu.madcourse.firebasechatapp.R;
+import neu.edu.madcourse.firebasechatapp.Utils.ImageSelector;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolder> {
 
@@ -42,7 +43,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
     public void onBindViewHolder(@NonNull @NotNull UserAdapter.UsersViewHolder holder, int position) {
         Users users = mUsers.get(position);
         holder.username.setText(users.getUsername());
-        holder.image.setImageResource(R.mipmap.ic_launcher);
+        ImageSelector.select(holder.image, users.getUsername());
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
