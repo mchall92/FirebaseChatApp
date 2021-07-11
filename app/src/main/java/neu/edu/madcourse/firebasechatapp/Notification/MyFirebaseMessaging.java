@@ -22,6 +22,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.jetbrains.annotations.NotNull;
 
 import neu.edu.madcourse.firebasechatapp.MessageActivity;
+import neu.edu.madcourse.firebasechatapp.R;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
     @Override
@@ -93,7 +94,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(Integer.parseInt(icon))
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)

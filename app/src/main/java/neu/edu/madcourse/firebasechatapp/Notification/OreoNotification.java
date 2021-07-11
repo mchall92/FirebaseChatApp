@@ -10,6 +10,8 @@ import android.content.ContextWrapper;
 import android.net.Uri;
 import android.os.Build;
 
+import neu.edu.madcourse.firebasechatapp.R;
+
 public class OreoNotification extends ContextWrapper {
 
     private static final String CHANNEL_ID = "neu.edu.madcourse.firebasechatapp";
@@ -53,7 +55,7 @@ public class OreoNotification extends ContextWrapper {
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(Integer.parseInt(icon))
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setSound(soundUri)
                 .setAutoCancel(true);
     }
