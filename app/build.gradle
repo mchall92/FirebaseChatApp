@@ -53,4 +53,10 @@ dependencies {
 
     // circular imageview border
     implementation 'com.mikhaellopez:circularimageview:4.3.0'
+
+    // notification
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+
 }

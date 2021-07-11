@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +20,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +31,7 @@ import java.util.List;
 import neu.edu.madcourse.firebasechatapp.Adapters.UserAdapter;
 import neu.edu.madcourse.firebasechatapp.Model.ChatList;
 import neu.edu.madcourse.firebasechatapp.Model.Users;
+import neu.edu.madcourse.firebasechatapp.Notification.Token;
 import neu.edu.madcourse.firebasechatapp.R;
 
 /**
@@ -121,7 +126,25 @@ public class ChatsFragment extends Fragment {
             }
         });
 
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                // Get new FCM registration token
+                updateToken(task.getResult());
+            }
+        });
+
         return view;
+    }
+
+    private void updateToken(String token) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token updatedToken = new Token(token);
+        ref.child(firebaseUser.getUid()).setValue(updatedToken);
     }
 
     private void buildChatList() {

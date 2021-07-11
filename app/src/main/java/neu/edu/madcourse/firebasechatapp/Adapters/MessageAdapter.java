@@ -83,16 +83,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         return mChatList.size();
     }
 
-
-    public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private ImageView message;
-
-        public MessageViewHolder(@NonNull @NotNull View itemView) {
-            super(itemView);
-            message = itemView.findViewById(R.id.show_message);
-        }
-    }
-
     @Override
     public int getItemViewType(int position) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -100,6 +90,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             return MSG_TYPE_RIGHT;
         } else {
             return MSG_TYPE_LEFT;
+        }
+    }
+
+    public class MessageViewHolder extends RecyclerView.ViewHolder {
+        private ImageView message;
+
+        public MessageViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            message = itemView.findViewById(R.id.show_message);
         }
     }
 }
