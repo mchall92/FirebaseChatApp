@@ -230,7 +230,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     Token token = sn.getValue(Token.class);
                     Data data = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher,
-                            username + " send you a sticker, go check it out! ", "New Message", userId);
+                            username + " just sent you a sticker, go check it out!", "New Message", userId);
 
                     Sender sender = new Sender(data, token.getToken());
 
