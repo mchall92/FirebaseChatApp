@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -51,7 +52,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
-        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
+        int j = 0;
+        try {
+            j= Integer.parseInt(user.replaceAll("[\\D]", ""));
+        } catch (NumberFormatException e) {
+            Log.i("notification", "NumberFormatException");
+        }
         Intent intent = new Intent(this, MessageActivity.class);
         intent.putExtra("userId", user);
         Bundle bundle = new Bundle();
@@ -85,7 +91,13 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
-        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
+        int j = 0;
+        try {
+            j= Integer.parseInt(user.replaceAll("[\\D]", ""));
+        } catch (NumberFormatException e) {
+            Log.i("notification", "NumberFormatException");
+        }
+
         Intent intent = new Intent(this, MessageActivity.class);
         intent.putExtra("userId", user);
         Bundle bundle = new Bundle();
